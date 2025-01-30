@@ -5,11 +5,16 @@ import json
 import copy
 import math
 import logging
+import urllib.request
 logging.basicConfig()
 lg = logging.getLogger(__name__)
 
 def parse(input, format, **kwargs):
-    fullPath = input
+    url = input
+    response = urllib.request.urlopen(url)
+    data = response.read()
+
+    fullPath = data # input
     
     blah = olefile.OleFileIO(fullPath)
     stream = blah.openstream('FileHeader')
@@ -30,7 +35,8 @@ def parse(input, format, **kwargs):
         for pair in pairs:
             data = pair.split(b"=")
             
-            datum[data[0].decode()] = data[1].decode('utf-8', 'ignore')
+            if len(data) == 2:
+                datum[data[0].decode()] = data[1].decode('utf-8', 'ignore')
         
         datums.append(datum)
     

@@ -1,64 +1,145 @@
-# Altium-Schematic-Parser
-Converts Altium .SchDoc files into json
-## Prerequisites
-* python 3 (3.4 to 3.11; currently doesn't support 3.12+)
-* olefile
-## Install
-    git clone git@github.com:a3ng7n/Altium-Schematic-Parser.git
-    cd Altium-Schematic-Parser
-    pip install -e .
-## Usage
-Full description
+<p align="center">
+    <img src="https://sacredgraph.com/sacredgraph.svg" align="center" width="30%">
+</p>
+<p align="center"><h1 align="center">SchDoc Parser API</h1></p>
+<p align="center">
+	<em><code>Rest API to convert .SchDoc files into JSON representation</code></em>
+</p>
+<p align="center">
+	<img src="https://img.shields.io/github/license/SacredGraph/schdoc-parsing-api?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/last-commit/SacredGraph/schdoc-parsing-api?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/SacredGraph/schdoc-parsing-api?style=default&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/SacredGraph/schdoc-parsing-api?style=default&color=0080ff" alt="repo-language-count">
+</p>
+<p align="center"><!-- default option, no dependency badges. -->
+</p>
+<p align="center">
+	<!-- default option, no dependency badges. -->
+</p>
+<br>
 
-    usage: parse.py [-h] [-o OUTPUT]
-                    [-f {all-list,all-hierarchy,parts-list,net-list}]
-                    input
+## Table of Contents
 
-Ex: to export all contents of altiumschematic.schdoc to jsonfile.json within path/to/:
+- [ Overview](#-overview)
+- [ Project Structure](#-project-structure)
+  - [ Project Index](#-project-index)
+- [ Getting Started](#-getting-started)
+  - [ Prerequisites](#-prerequisites)
+  - [ Installation](#-installation)
+  - [ Usage](#-usage)
+  - [ Testing](#-testing)
+- [ Project Roadmap](#-project-roadmap)
+- [ Contributing](#-contributing)
+- [ License](#-license)
+- [ Acknowledgments](#-acknowledgments)
 
-    python parse.py "path/to/altiumschematic.schdoc" -o "path/to/jsonfile.json"
-**NOTE**:
-the default output formatting behavior (-f/--format) if not supplied is to show all contents
-retaining all hierarchy information
+---
 
-## Command line arguments
-    
-    positional arguments:
-      input                 path/to/altiumschematic.schdoc file to parse
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      -o OUTPUT, --output OUTPUT
-                            path/to/jsonfile.json file to output json to, otherwise prints to terminal
-      -f {all-list,all-hierarchy,parts-list,net-list}, --format {all-list,all-hierarchy,parts-list,net-list}
-                            all-list: All records in a flattened list
-                            all-hierarchy: All records in an owner/child "hierarchy"
-                            parts-list: A listing of parts and their designators
-                            net-list: A listing of nets between parts pins, referred to by their designators
+## Overview
 
-# Notes
-## schdoc file format
-Record ids:
-* 1:    a part, type identified by either "LIBREFERENCE" or "DESIGNITEMID"
-* 2:    a pin on a part, with types indicated by "ELECTRICAL"
-    * 4:            "Passive"
-    * 7:            "Power"
-* 4:    a "Annotation", which appears to just be a text box for referential purposes
-* 6:    a "drawing" I think... "Xn"/"Yn" are values of where a line should be drawn
-* 17:   a "Power Port", used commonly as GND or VCC, identified by "TEXT", "LOCATION.X", "LOCATION.Y",
-and a symbol denoted by "STYLE"
-* 25:   a "Net Label", which is similar to a "Power Port" in giving net designation to a wire,
-but doesn't come with a symbol (aka STYLE)
-* 27:   a "Wire", aka connecting line used to determine net associations
-* 34:   a designator?
-* 41:   text associated with an "OWNERPARTID" - lots of different types indicated by "NAME"
-    * PinUniqueId:  I suspect a unique id for the associated pin
-    * Fitted:       ...wat?
-    * Comment:      self explanatory
-* 44:   a container of "models" aka record 45's - see below
-* 45:   appears to be a reference to which "model" a particular part can be represented by. Since this is just a
-possible model, the one actually selected for a given part will have the "ISCURRENT" flag set to "T"
+<code>The project's goal is to allow converting .SchDoc files on the fly into a json format.</code>
 
-## Net Association
-Altium seems to have a very very very bizarre way of designating or determining the designation of what is a net,
-and what's connected to that net.
+---
+
+## Project Structure
+
+```sh
+└── schdoc-parsing-api/
+    ├── LICENSE
+    ├── README.md
+    ├── altium_schematic_parser
+    │   ├── __init__.py
+    │   └── parse.py
+    ├── requirements.txt
+    ├── main.py
+    ├── setup.py
+    └── tests
+        └── altium_crap
+```
+
+### Project Index
+
+<details open>
+	<summary><b><code>SCHDOC-PARSING-API/</code></b></summary>
+	<details> <!-- __root__ Submodule -->
+		<summary><b>__root__</b></summary>
+		<blockquote>
+			<table>
+			<tr>
+				<td><b><a href='https://github.com/SacredGraph/schdoc-parsing-api/blob/master/requirements.txt'>requirements.txt</a></b></td>
+			</tr>
+			<tr>
+				<td><b><a href='https://github.com/SacredGraph/schdoc-parsing-api/blob/master/main.py'>main.py</a></b></td>
+			</tr>
+			<tr>
+				<td><b><a href='https://github.com/SacredGraph/schdoc-parsing-api/blob/master/setup.py'>setup.py</a></b></td>
+			</tr>
+			</table>
+		</blockquote>
+	</details>
+	<details> <!-- altium_schematic_parser Submodule -->
+		<summary><b>altium_schematic_parser</b></summary>
+		<blockquote>
+			<table>
+			<tr>
+				<td><b><a href='https://github.com/SacredGraph/schdoc-parsing-api/blob/master/altium_schematic_parser/parse.py'>parse.py</a></b></td>
+			</tr>
+			</table>
+		</blockquote>
+	</details>
+</details>
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Before getting started with schdoc-parsing-api, ensure your runtime environment meets the following requirements:
+
+- **Programming Language:** Python
+- **Package Manager:** Pip
+
+### Installation
+
+Install schdoc-parsing-api using one of the following methods:
+
+**Build from source:**
+
+1. Clone the schdoc-parsing-api repository:
+
+```sh
+❯ git clone https://github.com/SacredGraph/schdoc-parsing-api
+```
+
+2. Navigate to the project directory:
+
+```sh
+❯ cd schdoc-parsing-api
+```
+
+3. Install the project dependencies:
+
+**Using `pip`** &nbsp; [<img align="center" src="https://img.shields.io/badge/Pip-3776AB.svg?style={badge_style}&logo=pypi&logoColor=white" />](https://pypi.org/project/pip/)
+
+```sh
+❯ pip install -r requirements.txt
+```
+
+### Usage
+
+Run schdoc-parsing-api using the following command:
+**Using `pip`** &nbsp; [<img align="center" src="https://img.shields.io/badge/Pip-3776AB.svg?style={badge_style}&logo=pypi&logoColor=white" />](https://pypi.org/project/pip/)
+
+```sh
+❯ python main.py
+```
+
+### Testing
+
+Run the test suite using the following command:
+**Using `pip`** &nbsp; [<img align="center" src="https://img.shields.io/badge/Pip-3776AB.svg?style={badge_style}&logo=pypi&logoColor=white" />](https://pypi.org/project/pip/)
+
+```sh
+❯ pytest
+```
